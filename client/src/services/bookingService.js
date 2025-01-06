@@ -43,6 +43,6 @@ const getVehicleBookings = async (vehicleId, token) => {
 export default {
   createBooking,
   updateBooking,
-  deleteBooking,
   getVehicleBookings,
+  deleteBooking,
 };

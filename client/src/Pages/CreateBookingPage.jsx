@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import BookingService from "../services/BookingService";
+import BookingService from "../services/bookingService";
 
 
 const CreateBookingPage = () => {
