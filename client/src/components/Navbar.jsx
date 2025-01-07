@@ -1,6 +1,13 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaTable,  FaUtensils,FaSearch, FaClipboard, FaUserAlt, FaSignOutAlt, FaBuilding } from "react-icons/fa"; // Different icons for the navbar
+import { FaTable, 
+   FaUtensils,
+   FaSearch, 
+   FaClipboard, 
+   FaUserAlt, 
+   FaSignOutAlt, 
+   FaBuilding
+   } from "react-icons/fa"; // Different icons for the navbar
 import { motion } from "framer-motion"; // For animations
 
 const Navbar = () => {
@@ -23,7 +30,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <NavLink to="/" className="text-3xl font-bold text-yellow-600 hover:text-yellow-700 transition duration-300">
          {/* < FaUtensils className="inline-block mr-2 text-blue-500" />  */}
-         <link rel="icon" href="./key-card.pgn" />
+         {/* <link rel="icon" href="./key-card.pgn" /> */}
           Rentel `Vehicle` Master
         </NavLink>
 
@@ -33,8 +40,11 @@ const Navbar = () => {
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
                   to="/vehicles"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
                   <FaSearch className="inline-block mr-2" />
                   Explore Vehicles
@@ -44,8 +54,11 @@ const Navbar = () => {
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
                   to="/recommendations"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
                   <FaClipboard className="inline-block mr-2" />
                   Recommendations
@@ -54,11 +67,14 @@ const Navbar = () => {
               </motion.li>
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
-                  to="/reservations"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  to="/bookings"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
-                  <FaClipboard className="inline-block mr-2" />
+                  <FaBuilding className="inline-block mr-2" />
                   Booking
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>
@@ -66,10 +82,13 @@ const Navbar = () => {
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
                   to="/user-dashboard"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
-                  <FaUserAlt className="inline-block mr-2" />
+                  <FaClipboard className="inline-block mr-2" />
                   User Dashboard
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>
@@ -90,33 +109,42 @@ const Navbar = () => {
             <>
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
-                  to="/create-restaurant"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  to="/create-vehicle"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
                   <FaBuilding className="inline-block mr-2" />
-                  Create Restaurant
+                  Create Vehicle
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>
               </motion.li>
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
-                  to="/admin-reservations"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  to="/admin-bookings"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
-                  <FaClipboard className="inline-block mr-2" />
-                  Admin Reservations
+                  <FaBuilding className="inline-block mr-2" />
+                  Admin Bookings
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>
               </motion.li>
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
                   to="/admin-dashboard"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
-                  <FaUserAlt className="inline-block mr-2" />
+                  <FaClipboard className="inline-block mr-2" />
                   Admin Dashboard
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>
@@ -124,10 +152,13 @@ const Navbar = () => {
               <motion.li whileHover={{ scale: 1.1 }} transition={{ duration: 0.3 }}>
                 <NavLink
                   to="/admin-reviews"
-                  className="text-lg hover:text-yellow-500 transition duration-300 relative group"
-                  activeClassName="text-yellow-500"
+                  className={({ isActive }) =>
+                    `text-lg transition duration-300 relative group ${
+                      isActive ? "text-yellow-500" : "hover:text-yellow-500"
+                    }`
+                  }
                 >
-                  <FaUserAlt className="inline-block mr-2" />
+                  <FaClipboard className="inline-block mr-2" />
                   Admin Reviews
                   <span className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500 transition-all duration-300 transform scale-x-0 group-hover:scale-x-100"></span>
                 </NavLink>

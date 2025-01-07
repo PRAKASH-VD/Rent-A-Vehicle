@@ -1,23 +1,23 @@
-import Restaurant from '../models/Restaurant.js';
+import Vehicle from '../models/Vehicle.js';
 
-export const createRestaurant = async (req, res) => {
+export const createVehicle = async (req, res) => {
   try {
-    const restaurant = await Restaurant.create({
+    const vehicle = await Vehicle.create({
       ...req.body,
       owner: req.user._id,
     });
-    res.status(201).json(restaurant);
+    res.status(201).json(vehicle);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-export const getRestaurants = async (req, res) => {
+export const getVehicles = async (req, res) => {
   try {
-    const { cuisine, priceRange, features, search, location } = req.query;
+    const { type, priceRange, features, search, location } = req.query;
     const query = {};
 
-    if (cuisine) query.cuisine = cuisine;
+    if (type) query.type = type;
     if (priceRange) query.priceRange = priceRange;
     if (features) query.features = { $in: features.split(',') };
     
@@ -42,74 +42,74 @@ export const getRestaurants = async (req, res) => {
       };
     }
 
-    const restaurants = await Restaurant.find(query)
+    const vehicles = await Vehicle.find(query)
       .populate('owner', 'name')
       .populate('reviews')
       .sort('-rating');
 
-    res.json(restaurants);
+    res.json(vehicles);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getRestaurantById = async (req, res) => {
+export const getVehicleById = async (req, res) => {
   try {
-    const restaurant = await Restaurant.findById(req.params.id)
+    const vehicle = await Vehicle.findById(req.params.id)
       .populate('owner', 'name')
       .populate({
         path: 'reviews',
         populate: { path: 'user', select: 'name' },
       });
 
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    if (!vehicle) {
+      return res.status(404).json({ message: 'Vehicle not found' });
     }
 
-    res.json(restaurant);
+    res.json(vehicle);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const updateRestaurant = async (req, res) => {
+export const updateVehicle = async (req, res) => {
   try {
-    const restaurant = await Restaurant.findById(req.params.id);
+    const vehicle = await Vehicle.findById(req.params.id);
 
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    if (!vehicle) {
+      return res.status(404).json({ message: 'Vehicle not found' });
     }
 
-    if (restaurant.owner.toString() !== req.user._id.toString()) {
+    if (vehicle.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
 
-    res.json(updatedRestaurant);
+    res.json(updatedVehicle);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-export const deleteRestaurant = async (req, res) => {
+export const deleteVehicle = async (req, res) => {
   try {
-    const restaurant = await Restaurant.findById(req.params.id);
+    const vehicle = await Vehicle.findById(req.params.id);
 
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    if (!vehicle) {
+      return res.status(404).json({ message: 'Vehicle not found' });
     }
 
-    if (restaurant.owner.toString() !== req.user._id.toString()) {
+    if (vehicle.owner.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    await restaurant.deleteOne();
-    res.json({ message: 'Restaurant removed' });
+    await vehicle.deleteOne();
+    res.json({ message: 'Vehicle removed' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

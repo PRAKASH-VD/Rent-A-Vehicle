@@ -1,5 +1,5 @@
 import User from '../models/User.js';
-import Restaurant from '../models/Restaurant.js';
+import Vehicle from '../models/Vehicle.js';
 import Review from '../models/Review.js';
 import CollaborativeFilter from 'collaborative-filter';
 
@@ -9,16 +9,16 @@ export class RecommendationService {
       // Get user's reviews and preferences
       const userReviews = await Review.find({ user: userId });
       const allUsers = await User.find({});
-      const allRestaurants = await Restaurant.find({});
+      const allVehicles = await Vehicle.find({});
 
       // Create ratings matrix
       const ratingsMatrix = [];
       for (const user of allUsers) {
         const userRatings = [];
-        for (const restaurant of allRestaurants) {
+        for (const vehicle of allVehicles) {
           const review = await Review.findOne({
             user: user._id,
-            restaurant: restaurant._id,
+            vehicle: vehicle._id,
           });
           userRatings.push(review ? review.rating : 0);
         }
@@ -38,18 +38,18 @@ export class RecommendationService {
         'pearson' // correlation coefficient
       );
 
-      // Get recommended restaurant details
-      const recommendedRestaurants = await Promise.all(
+      // Get recommended vehicle details
+      const recommendedVehicles = await Promise.all(
         recommendations.map(async (score, index) => {
           if (score > 0) {
-            const restaurant = allRestaurants[index];
+            const vehicle = allVehicles[index];
             const existingReview = userReviews.find(review => 
-              review.restaurant.toString() === restaurant._id.toString()
+              review.vehicle.toString() === vehicle._id.toString()
             );
 
             if (!existingReview) {
               return {
-                ...restaurant.toObject(),
+                ...vehicle.toObject(),
                 recommendationScore: score,
               };
             }
@@ -58,7 +58,7 @@ export class RecommendationService {
         })
       );
 
-      return recommendedRestaurants.filter(Boolean);
+      return recommendedVehicles.filter(Boolean);
     } catch (error) {
       console.error('Recommendation error:', error);
       throw error;

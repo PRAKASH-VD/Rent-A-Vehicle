@@ -1,16 +1,17 @@
 import User from '../models/User.js';
-import Reservation from '../models/Reservation.js';
+import Booking from '../models/Booking.js';
 import Review from '../models/Review.js';
-import Restaurant from '../models/Restaurant.js';
+import Vehicle from '../models/Vehicle.js';
 import { catchAsync } from '../utils/catchAsync.js';
 
 export const getUserProfile = catchAsync(async (req, res) => {
   const user = await User.findById(req.user._id)
     .select('-password')
-    .populate('favorites', 'name cuisine rating images');
+    .populate('favorites', 'name type rating images');
 
   res.json(user);
 });
+
 
 export const updateUserProfile = catchAsync(async (req, res) => {
   const { name, email } = req.body;
@@ -33,7 +34,7 @@ export const updateUserProfile = catchAsync(async (req, res) => {
   });
 });
 
-export const getUserReservations = catchAsync(async (req, res) => {
+export const getUserBookings = catchAsync(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const status = req.query.status;
@@ -41,16 +42,35 @@ export const getUserReservations = catchAsync(async (req, res) => {
   const query = { user: req.user._id };
   if (status) query.status = status;
 
-  const reservations = await Reservation.find(query)
-    .populate('restaurant', 'name address images rating')
+  const bookings = await Booking.find(query)
+    .populate('vehicle', 'name address images rating')
     .sort('-date')
     .skip((page - 1) * limit)
     .limit(limit);
 
-  const total = await Reservation.countDocuments(query);
+  const total = await Booking.countDocuments(query);
 
   res.json({
-    reservations,
+    bookings,
+    page,
+    pages: Math.ceil(total / limit),
+    total,
+    message: 'Bookings fetched successfully'
+  });
+});
+export const getUserVehicles = catchAsync(async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  const vehicles = await Vehicle.find({ owner: req.user._id })
+    .sort('-createdAt')
+    .skip((page - 1) * limit)
+    .limit(limit);
+
+  const total = await Vehicle.countDocuments({ owner: req.user._id });
+
+  res.json({
+    vehicles,
     page,
     pages: Math.ceil(total / limit),
     total,
@@ -62,7 +82,7 @@ export const getUserReviews = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit) || 10;
 
   const reviews = await Review.find({ user: req.user._id })
-    .populate('restaurant', 'name address images')
+    .populate('vehicle', 'name address images')
     .sort('-createdAt')
     .skip((page - 1) * limit)
     .limit(limit);
@@ -81,7 +101,7 @@ export const getUserFavorites = catchAsync(async (req, res) => {
   const user = await User.findById(req.user._id)
     .populate({
       path: 'favorites',
-      select: 'name cuisine rating images address priceRange',
+      select: 'name type rating images address priceRange',
       populate: {
         path: 'reviews',
         select: 'rating',
@@ -91,18 +111,18 @@ export const getUserFavorites = catchAsync(async (req, res) => {
   res.json(user.favorites);
 });
 
-export const toggleFavoriteRestaurant = catchAsync(async (req, res) => {
-  const { restaurantId } = req.params;
+export const toggleFavoriteVehicle = catchAsync(async (req, res) => {
+  const { vehicleId } = req.params;
   const user = await User.findById(req.user._id);
 
-  const isCurrentlyFavorited = user.favorites.includes(restaurantId);
+  const isCurrentlyFavorited = user.favorites.includes(vehicleId);
 
   if (isCurrentlyFavorited) {
     user.favorites = user.favorites.filter(
-      (id) => id.toString() !== restaurantId
+      (id) => id.toString() !== vehicleId
     );
   } else {
-    user.favorites.push(restaurantId);
+    user.favorites.push(vehicleId);
   }
 
   await user.save();
@@ -110,7 +130,7 @@ export const toggleFavoriteRestaurant = catchAsync(async (req, res) => {
   res.json({
     isFavorited: !isCurrentlyFavorited,
     message: isCurrentlyFavorited
-      ? 'Restaurant removed from favorites'
-      : 'Restaurant added to favorites',
+      ? 'Vehicle removed from favorites'
+      : 'Vehicle added to favorites',
   });
 });

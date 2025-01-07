@@ -11,7 +11,7 @@ npm install jsonwebtoken mongoose
 npm install cloudinary
 npm install multer
 npm install multer-storage-cloudinary
-
+npm install nodemailer
 
 
 

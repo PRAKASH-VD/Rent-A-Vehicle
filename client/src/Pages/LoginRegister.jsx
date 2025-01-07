@@ -24,7 +24,8 @@ const LoginRegister = () => {
 
     try {
       const response = await axios.post(
-        "https://table-reservation-m21o.onrender.com/api/auth/register",
+       
+        "http://localhost:3001/api/auth/register", //need rendorlink
         formData
       );
 

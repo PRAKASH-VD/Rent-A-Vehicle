@@ -92,7 +92,7 @@ const VehicleDetailsPage = () => {
             
               backgroundImage: `url(${
                 vehicle.images[0] ||
-                "https://source.unsplash.com/1200x800/?food,restaurant"
+                "https://source.unsplash.com/1200x800/?food,vehicle"
               })`,
             }}
             initial={{ scale: 1 }}

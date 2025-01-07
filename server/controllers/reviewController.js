@@ -1,10 +1,10 @@
 import Review from '../models/Review.js';
-import Restaurant from '../models/Restaurant.js';
+import Vehicle from '../models/Vehicle.js';
 import { uploadMiddleware, deleteImage } from '../config/cloudinary.js';
 
-export const getRestaurantReviews = async (req, res) => {
+export const getVehicleReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({ restaurant: req.params.restaurantId })
+    const reviews = await Review.find({ vehicle: req.params.vehicleId })
       .populate('user', 'name')
       .sort('-createdAt');
 
@@ -15,33 +15,33 @@ export const getRestaurantReviews = async (req, res) => {
 };
 export const createReview = async (req, res) => {
   try {
-    const { restaurantId, rating, comment } = req.body;
+    const { vehicleId, rating, comment } = req.body;
     const images = req.files ? req.files.map(file => file.path) : [];
 
-    const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) {
+      return res.status(404).json({ message: 'Vehicle not found' });
     }
 
     const existingReview = await Review.findOne({
-      restaurant: restaurantId,
+      vehicle: vehicleId,
       user: req.user._id,
     });
 
     if (existingReview) {
-      return res.status(400).json({ message: 'You have already reviewed this restaurant' });
+      return res.status(400).json({ message: 'You have already reviewed this vehicle' });
     }
 
     const review = await Review.create({
-      restaurant: restaurantId,
+      vehicle: vehicleId,
       user: req.user._id,
       rating,
       comment,
       photos: images,
     });
 
-    restaurant.reviews.push(review._id);
-    await restaurant.save();
+    vehicle.reviews.push(review._id);
+    await vehicle.save();
 
     const populatedReview = await Review.findById(review._id)
       .populate('user', 'name');
@@ -107,7 +107,7 @@ export const deleteReview = async (req, res) => {
       await deleteImage(imageUrl);
     }
 
-    await Restaurant.findByIdAndUpdate(review.restaurant, {
+    await Vehicle.findByIdAndUpdate(review.vehicle, {
       $pull: { reviews: review._id },
     });
 
@@ -121,15 +121,15 @@ export const deleteReview = async (req, res) => {
 export const addOwnerResponse = async (req, res) => {
   try {
     const review = await Review.findById(req.params.id)
-      .populate('restaurant', 'owner');
+      .populate('vehicle', 'owner');
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
     }
 
-    // Check if the user is the restaurant owner
-    if (review.restaurant.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized - only restaurant owners can respond to reviews' });
+    // Check if the user is the vehicle owner
+    if (review.vehicle.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized - only vehicle owners can respond to reviews' });
     }
 
     // Check if response already exists
@@ -160,15 +160,15 @@ export const addOwnerResponse = async (req, res) => {
 export const updateOwnerResponse = async (req, res) => {
   try {
     const review = await Review.findById(req.params.id)
-      .populate('restaurant', 'owner');
+      .populate('vehicle', 'owner');
 
     if (!review) {
       return res.status(404).json({ message: 'Review not found' });
     }
 
     // Check if the user is the restaurant owner
-    if (review.restaurant.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized - only restaurant owners can update responses' });
+    if (review.vehicle.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized - only vehicle owners can update responses' });
     }
 
     // Check if response exists

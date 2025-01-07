@@ -1,10 +1,10 @@
 export const ROLES = {
   USER: 'user',
-  RESTAURANT_OWNER: 'restaurant_owner',
+  VEHICLE_OWNER: 'vehicle_owner',
   ADMIN: 'admin',
 };
 
-export const RESERVATION_STATUS = {
+export const BOOKING_STATUS = {
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
   CANCELLED: 'cancelled',

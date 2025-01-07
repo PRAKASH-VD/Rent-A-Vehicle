@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://table-reservation-m21o.onrender.com/api/reservations";
+const API_URL = "http://localhost:3001/api/bookings";
 
 const createBooking = async (bookingData) => {
   try {   

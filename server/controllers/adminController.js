@@ -1,31 +1,31 @@
 import User from '../models/User.js';
-import Restaurant from '../models/Restaurant.js';
-import Reservation from '../models/Reservation.js';
+import Vechele from '../models/Vehicle.js';
+import Booking from '../models/Booking.js';
 import Review from '../models/Review.js';
 import { catchAsync } from '../utils/catchAsync.js';
 
 export const getDashboardStats = catchAsync(async (req, res) => {
   const [
     totalUsers,
-    totalRestaurants,
-    totalReservations,
+    totalVehicles,
+    totalBookings,
     totalReviews,
   ] = await Promise.all([
     User.countDocuments(),
-    Restaurant.countDocuments(),
-    Reservation.countDocuments(),
+    Vehicle.countDocuments(),
+    Booking.countDocuments(),
     Review.countDocuments(),
   ]);
 
   // Get recent activity
-  const recentReservations = await Reservation.find()
-    .populate('restaurant', 'name')
+  const recentBookings = await Booking.find()
+    .populate('vehicle', 'name')
     .populate('user', 'name')
     .sort('-createdAt')
     .limit(5);
 
   const recentReviews = await Review.find()
-    .populate('restaurant', 'name')
+    .populate('vehicle', 'name')
     .populate('user', 'name')
     .sort('-createdAt')
     .limit(5);
@@ -33,12 +33,12 @@ export const getDashboardStats = catchAsync(async (req, res) => {
   res.json({
     stats: {
       totalUsers,
-      totalRestaurants,
-      totalReservations,
+      totalVehicles,
+      totalBookings,
       totalReviews,
     },
     recentActivity: {
-      reservations: recentReservations,
+      bookings: recentBookings,
       reviews: recentReviews,
     },
   });
@@ -74,7 +74,7 @@ export const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
-export const getAllRestaurants = catchAsync(async (req, res) => {
+export const getAllVehicles = catchAsync(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const search = req.query.search || '';
@@ -90,23 +90,23 @@ export const getAllRestaurants = catchAsync(async (req, res) => {
     ...(status && { status }),
   };
 
-  const restaurants = await Restaurant.find(query)
+  const vehicles = await Vehicle.find(query)
     .populate('owner', 'name email')
     .sort('-createdAt')
     .skip((page - 1) * limit)
     .limit(limit);
 
-  const total = await Restaurant.countDocuments(query);
+  const total = await Vehicle.countDocuments(query);
 
   res.json({
-    restaurants,
+    vehicles,
     page,
     pages: Math.ceil(total / limit),
     total,
   });
 });
 
-export const getRestaurantAnalytics = catchAsync(async (req, res) => {
+export const getVehicleAnalytics = catchAsync(async (req, res) => {
   const { startDate, endDate } = req.query;
 
   const dateQuery = {
@@ -117,18 +117,18 @@ export const getRestaurantAnalytics = catchAsync(async (req, res) => {
   };
 
   const [
-    reservationsCount,
+    bookingsCount,
     reviewsCount,
     averageRating,
-    cuisineDistribution,
+    typeDistribution,
   ] = await Promise.all([
-    Reservation.countDocuments(dateQuery),
+    Booking.countDocuments(dateQuery),
     Review.countDocuments(dateQuery),
     Review.aggregate([
       { $match: dateQuery },
       { $group: { _id: null, avgRating: { $avg: '$rating' } } },
     ]),
-    Restaurant.aggregate([
+    Vehicle.aggregate([
       { $group: { _id: '$cuisine', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ]),
@@ -136,17 +136,17 @@ export const getRestaurantAnalytics = catchAsync(async (req, res) => {
 
   res.json({
     metrics: {
-      reservationsCount,
+      bookingsCount,
       reviewsCount,
       averageRating: averageRating[0]?.avgRating || 0,
     },
     distributions: {
-      cuisine: cuisineDistribution,
+      type: typeDistribution,
     },
   });
 });
 
-export const getReservationStats = catchAsync(async (req, res) => {
+export const getBookingStats = catchAsync(async (req, res) => {
   const { startDate, endDate } = req.query;
 
   const dateQuery = {
@@ -156,7 +156,7 @@ export const getReservationStats = catchAsync(async (req, res) => {
     },
   };
 
-  const reservationStats = await Reservation.aggregate([
+  const bookingStats = await Booking.aggregate([
     { $match: dateQuery },
     {
       $group: {
@@ -166,7 +166,7 @@ export const getReservationStats = catchAsync(async (req, res) => {
     },
   ]);
 
-  const dailyReservations = await Reservation.aggregate([
+  const dailyBookings = await Booking.aggregate([
     { $match: dateQuery },
     {
       $group: {
@@ -178,8 +178,8 @@ export const getReservationStats = catchAsync(async (req, res) => {
   ]);
 
   res.json({
-    byStatus: reservationStats,
-    dailyTrends: dailyReservations,
+    byStatus: bookingStats,
+    dailyTrends: dailyBookings,
   });
 });
 

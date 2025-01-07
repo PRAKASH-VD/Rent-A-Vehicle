@@ -18,9 +18,9 @@ const AdminBookingPage = ({ currentUser }) => {
   console.log(decoded.id);
 const adminId = decoded.id;
   useEffect(() => {
-    const fetchOwnedRestaurants = async () => {
+    const fetchOwnedVehicles = async () => {
       try {
-        const response = await axios.get("https://table-reservation-m21o.onrender.com/api/restaurants",
+        const response = await axios.get("http://localhost:3001/api/vehicles",//need reandorlink
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include auth token
@@ -51,7 +51,7 @@ const adminId = decoded.id;
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://table-reservation-m21o.onrender.com/api/reservations/restaurant/${selectedVehicle}`,
+          `http://localhost:3001/api/bookings/vehicle/${selectedVehicle}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include auth token

@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
-const reservationSchema = new mongoose.Schema({
-  restaurant: {
+const bookingSchema = new mongoose.Schema({
+  vehicle: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
+    ref: 'Vehicle',
     required: true,
   },
   user: {
@@ -33,4 +33,4 @@ const reservationSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-export default mongoose.model('Reservation', reservationSchema);
+export default mongoose.model('Booking', bookingSchema);

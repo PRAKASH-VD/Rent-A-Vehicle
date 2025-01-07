@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const restaurantSchema = new mongoose.Schema({
+const vehicleSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -9,7 +9,7 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  cuisine: {
+  tyoe: {
     type: String,
     required: true,
   },
@@ -57,7 +57,7 @@ const restaurantSchema = new mongoose.Schema({
   }],
   features: [{
     type: String,
-    enum: ['Outdoor Seating', 'Live Music', 'Parking', 'Wheelchair Accessible', 'Wi-Fi'],
+    enum: ['Open Type', 'With-Out Driver', 'with Driver', 'Wheelchair Accessible', 'Wi-Fi'],
   }],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
@@ -68,6 +68,6 @@ const restaurantSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-restaurantSchema.index({ location: '2dsphere' });
+vehicleSchema.index({ location: '2dsphere' });
 
-export default mongoose.model('Restaurant', restaurantSchema);
+export default mongoose.model('Vehicle', vehicleSchema);

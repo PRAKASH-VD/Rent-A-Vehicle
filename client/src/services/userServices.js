@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://table-reservation-m21o.onrender.com/api/users";
+const API_URL = "http://localhost:3001/api/users";
 
 // Create an Axios instance
 const api = axios.create({

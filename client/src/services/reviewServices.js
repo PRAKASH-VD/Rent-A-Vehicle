@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://table-reservation-m21o.onrender.com/api/reviews'; 
+const API_URL = 'http://localhost:3001/api/reviews'; 
 
 // Function to create a review
 const createReview = async (formData) => {

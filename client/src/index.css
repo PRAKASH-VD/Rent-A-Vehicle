@@ -5,3 +5,13 @@
 body{
     font-family: serif
 }
+
+.active-class {
+    color: blue;
+    font-weight: bold;
+  }
+  
+  .inactive-class {
+    color: gray;
+  }
+  

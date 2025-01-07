@@ -17,14 +17,14 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'restaurant_owner', 'admin'],
+    enum: ['user', 'vehicle_owner', 'admin'],
     default: 'user',
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
+    ref: 'Vehicle',
   }],
 }, {
   timestamps: true,

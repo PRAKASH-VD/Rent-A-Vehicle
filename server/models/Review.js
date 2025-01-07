@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 const reviewSchema = new mongoose.Schema({
-  restaurant: {
+  vehicle: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
+    ref: 'Vehicle',
     required: true,
   },
   user: {
@@ -31,12 +31,12 @@ const reviewSchema = new mongoose.Schema({
 });
 
 reviewSchema.post('save', async function() {
-  const restaurant = await this.model('Restaurant').findById(this.restaurant);
-  const reviews = await this.model('Review').find({ restaurant: this.restaurant });
+  const vehicle = await this.model('Vehicle').findById(this.vehicle);
+  const reviews = await this.model('Review').find({ vehicle: this.vehicle });
   
   const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
-  restaurant.rating = Math.round(averageRating * 10) / 10;
-  await restaurant.save();
+  vehicle.rating = Math.round(averageRating * 10) / 10;
+  await vehicle.save();
 });
 
 export default mongoose.model('Review', reviewSchema);

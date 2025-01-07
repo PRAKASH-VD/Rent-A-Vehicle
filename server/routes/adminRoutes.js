@@ -3,9 +3,9 @@ import { protect, authorize } from '../middleware/auth.js';
 import {
   getDashboardStats,
   getAllUsers,
-  getAllRestaurants,
-  getRestaurantAnalytics,
-  getReservationStats,
+  getAllVehicles,
+  getVehicleAnalytics,
+  getBookingStats,
   getReviewStats,
 } from '../controllers/adminController.js';
 
@@ -16,14 +16,14 @@ router.use(authorize('admin'));
 
 // Dashboard and analytics
 router.get('/dashboard', getDashboardStats);
-router.get('/analytics/restaurants', getRestaurantAnalytics);
-router.get('/analytics/reservations', getReservationStats);
+router.get('/analytics/vehicles', getVehicleAnalytics);
+router.get('/analytics/bookings', getBookingStats);
 router.get('/analytics/reviews', getReviewStats);
 
 // User management
 router.get('/users', getAllUsers);
 
 // Restaurant management
-router.get('/restaurants', getAllRestaurants);
+router.get('/vehicles', getAllVehicles);
 
 export default router;

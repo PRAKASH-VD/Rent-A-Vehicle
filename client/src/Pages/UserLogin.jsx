@@ -19,7 +19,7 @@ const LoginPage = () => {
       const data = await authService.login(email, password);
       localStorage.setItem('userToken', data.token);
       toast.success('Login as user successful');
-      navigate('/restaurants');
+      navigate('/vehicles');
     } catch (error) {
       console.error('Login failed:', error);
       toast.error('Invalid credentials');

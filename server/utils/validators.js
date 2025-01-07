@@ -5,10 +5,10 @@ export const userSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  role: z.enum([ROLES.USER, ROLES.RESTAURANT_OWNER, ROLES.ADMIN]).optional(),
+  role: z.enum([ROLES.USER, ROLES.VEHICLE_OWNER, ROLES.ADMIN]).optional(),
 });
 
-export const restaurantSchema = z.object({
+export const vehicleSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   cuisine: z.string(),
@@ -23,7 +23,7 @@ export const restaurantSchema = z.object({
   features: z.array(z.string()),
 });
 
-export const reservationSchema = z.object({
+export const bookingSchema = z.object({
   date: z.string().datetime(),
   time: z.string(),
   partySize: z.number().min(1).max(20),

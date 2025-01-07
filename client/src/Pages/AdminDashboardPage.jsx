@@ -21,7 +21,7 @@ const AdminDashboardPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://table-reservation-m21o.onrender.com/api/admin/dashboard",
+          "http://localhost:3001/api/admin/dashboard", //need rendorline
           {
             headers: { Authorization: `Bearer ${token}` },
           }

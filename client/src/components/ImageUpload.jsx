@@ -47,7 +47,7 @@ export function ImageUpload({ onImagesUploaded, maxImages = 5 }) {
         formData.append('images', file);
       });
 
-      const response = await fetch('/api/restaurants/upload-images', {
+      const response = await fetch('/api/vehicles/upload-images', {
         method: 'POST',
         body: formData,
       });

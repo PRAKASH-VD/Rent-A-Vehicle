@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import restaurantRoutes from './routes/restaurantRoutes.js';
-import reservationRoutes from './routes/reservationRoutes.js';
+import vehicleRoutes from './routes/vehicleRoutes.js';
+import bookingRoutes from './routes/bookingRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -17,16 +17,16 @@ import dashboard from './routes/dashboard.js';
 
 
 // Load environment variables
-dotenv.config({ path: './.env' });;
+dotenv.config({ path: './.env' });
 
 // Create Express app
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    // origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    // methods: ['GET', 'POST'],
-    origin: '*'
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+    // origin: '*'
   },
 });
 
@@ -41,8 +41,8 @@ app.set('io', io);
 
 // Routes
 app.use('/api/auth', authRoutes); 
-app.use('/api/restaurants', restaurantRoutes);
-app.use('/api/reservations', reservationRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
@@ -50,7 +50,7 @@ app.use('/api/recommendations' ,recommendationRoutes)
 app.use('/api/dashboard',dashboard)
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL ,)
+mongoose.connect(process.env.MONGODB_URL,{serverSelectionTimeoutMS: 5000,})// Timeout after 5 seconds
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('MongoDB connection error:', error));
   
@@ -61,7 +61,8 @@ app.get('/', (req, res) => {
 app.get('/api/', (req, res) => {
   res.json({
       sucess: true ,
-       message : " Welcome to the API , connected to the DB" });
+       message : " Welcome to the API , connected to the DB" ,
+      });
   });
 
 
@@ -70,27 +71,27 @@ app.get('/api/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('Client connected');
 
-  socket.on('join_restaurant', (restaurantId) => {
-    socket.join(restaurantId);
+  socket.on('join_vehicle', (vehicleId) => {
+    socket.join(vehicleId);
   });
 
-  socket.on('reservation_update', (data) => {
-    io.to(data.restaurantId).emit('reservation_status', data);
+  socket.on('booking_update', (data) => {
+    io.to(data.vehicleId).emit('booking_status', data);
   });
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
+  socket.on('disconnect', (reason) => {
+    console.log(`Client disconnected: ${reason}`);
   });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  res.status(500).json({ message: 'Internal server error', error: err.message});
 });
 
 // Start server
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}` );
 });

@@ -3,10 +3,11 @@ import { protect } from '../middleware/auth.js';
 import {
   getUserProfile,
   updateUserProfile,
-  getUserReservations,
+  getUserVehicles,
   getUserReviews,
   getUserFavorites,
-  toggleFavoriteRestaurant,
+  toggleFavoriteVehicle,
+  getUserBookings,
 } from '../controllers/userController.js';
 
 const router = express.Router();
@@ -19,11 +20,14 @@ router.route('/profile')
   .put(updateUserProfile);
 
 // User activity routes
-router.get('/reservations', getUserReservations);
+router.get('/bookings', getUserBookings);
 router.get('/reviews', getUserReviews);
+
+// Vehicle management
+router.get('/vehicles', getUserVehicles);
 
 // Favorites management
 router.get('/favorites', getUserFavorites);
-router.post('/favorites/:restaurantId', toggleFavoriteRestaurant);
+router.post('/favorites/:vehicleId', toggleFavoriteVehicle);
 
 export default router;

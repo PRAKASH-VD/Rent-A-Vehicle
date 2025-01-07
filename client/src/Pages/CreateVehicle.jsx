@@ -133,9 +133,9 @@ const CreateVehicle = () => {
               onChange={(e) => setFeatures(Array.from(e.target.selectedOptions, option => option.value))}  
               className="w-full p-3 mt-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"  
             >  
-              <option value="Outdoor Seating">Open Type</option>  
-              <option value="Live Music">With-Out Driver</option>  
-              <option value="Parking">with Driver</option>  
+              <option value="Open Type">Open Type</option>  
+              <option value="With-Out Driver">With-Out Driver</option>  
+              <option value="with Driver">with Driver</option>  
               <option value="Wheelchair Accessible">Wheelchair Accessible</option>  
               <option value="Wi-Fi">Wi-Fi</option>  
             </select>  
