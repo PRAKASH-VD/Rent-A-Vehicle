@@ -13,9 +13,6 @@ import adminRoutes from './routes/adminRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
 import dashboard from './routes/dashboard.js';
 
-
-
-
 // Load environment variables
 dotenv.config({ path: './.env' });
 
@@ -25,12 +22,11 @@ const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.CLIENT_URL || 'https://reant-a-vehicles.netlify.app',
-    methods: ['GET', 'POST'], //, 'PUT', 'DELETE
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     // origin: '*'
   },
 });
-
 
 // Middleware
 app.use(cors());
@@ -39,34 +35,31 @@ app.use(express.json());
 // Make io available in routes
 app.set('io', io);
 
-
 // Routes
-app.use('/api/auth', authRoutes); 
+app.use('/api/auth', authRoutes);
 app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/recommendations' ,recommendationRoutes)
-app.use('/api/dashboard',dashboard)
+app.use('/api/recommendations', recommendationRoutes);
+app.use('/api/dashboard', dashboard);
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL,{serverSelectionTimeoutMS: 10000,})// Timeout after 5 seconds
+mongoose.connect(process.env.MONGODB_URL, { serverSelectionTimeoutMS: 5000 }) // Timeout after 5 seconds
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('MongoDB connection error:', error));
-  
-  
+
 app.get('/', (req, res) => {
-  res.redirect('/api' );
+  res.redirect('/api');
 });
+
 app.get('/api/', (req, res) => {
   res.json({
-      sucess: true ,
-       message : " Welcome to the API , connected to the DB" ,
-      });
+    success: true,
+    message: "Welcome to the API, connected to the DB",
   });
-
-
+});
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -80,19 +73,19 @@ io.on('connection', (socket) => {
     io.to(data.vehicleId).emit('booking_status', data);
   });
 
-  socket.on('disconnect', () => {
-    console.log('Client disconnected');
+  socket.on('disconnect', (reason) => {
+    console.log(`Client disconnected: ${reason}`);
   });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Internal server error', error: err.message});
+  res.status(500).json({ message: 'Internal server error', error: err.message });
 });
 
 // Start server
-const PORT = process.env.PORT || 3001 ;
+const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}` );
+  console.log(`Server running on port ${PORT}`);
 });
