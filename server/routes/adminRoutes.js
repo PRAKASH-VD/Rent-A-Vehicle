@@ -7,6 +7,7 @@ import {
   getVehicleAnalytics,
   getBookingStats,
   getReviewStats,
+  createVehicle,
   
 } from '../controllers/adminController.js';
 
@@ -46,7 +47,7 @@ router.get('/vehicles', getAllVehicles);
 // Update vehicle details
 // router.put('/vehicles/:id', updateVehicleDetails);
 
-// Create a new vehicle
-// router.post('/vehicles', createVehicle);
+// Create a new vehicle (admin only)
+router.post('/vehicles', protect, authorize('admin'), createVehicle);
 
 export default router;

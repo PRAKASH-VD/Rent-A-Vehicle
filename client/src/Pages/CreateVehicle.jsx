@@ -16,7 +16,7 @@ const CreateVehicle = () => {
     e.preventDefault();  
 
     if (!name || !description || !type || !priceRange || !city) {  
-      toast.error('All fi+elds are required');  
+      toast.error('All fields are required');  
       return;  
     }  
 

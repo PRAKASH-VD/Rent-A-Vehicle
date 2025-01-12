@@ -1,23 +1,23 @@
 import mongoose from 'mongoose';
 
-const vehicleSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  tyoe: {
-    type: String,
-    required: true,
-  },
-  priceRange: {
-    
+const vehicleSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'A vehicle must have a name'],
+    },
+    type: {
+      type: String,
+      required: [true, 'A vehicle must have a type'],
+    },
+    description: {
+      type: String,
+      required: [true, 'A vehicle must have a description'],
+    },
+
+  priceRange: {    
       type: Number,
-      required: true
-      
+      required: [true, 'A vehicle must have a price per day'],      
   },
   
   address: {
@@ -62,7 +62,7 @@ const vehicleSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true, 
+    required:  [true, 'A vehicle must have an owner'], 
   },
 }, {
   timestamps: true,

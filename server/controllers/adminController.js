@@ -4,6 +4,7 @@ import Booking from '../models/Booking.js';
 import Review from '../models/Review.js';
 import { catchAsync } from '../utils/catchAsync.js';
 
+
 // Get dashboard statistics
 export const getDashboardStats = catchAsync(async (req, res) => {
   const [
@@ -17,6 +18,8 @@ export const getDashboardStats = catchAsync(async (req, res) => {
     Booking.countDocuments(),
     Review.countDocuments(),
   ]);
+
+  
 
   // Get recent activity
   const recentBookings = await Booking.find()
@@ -41,6 +44,34 @@ export const getDashboardStats = catchAsync(async (req, res) => {
     recentActivity: {
       bookings: recentBookings,
       reviews: recentReviews,
+    },
+  });
+});
+
+// Create a new vehicle
+export const createVehicle = catchAsync(async (req, res, next) => {
+  const { name, type, description, pricePerDay, status, owner } = req.body;
+
+  // Validate required fields
+  if (!name || !type || !description || !pricePerDay || !status || !owner) {
+    return next(new AppError('All fields are required', 400));
+  }
+
+  // Create the vehicle in the database
+  const vehicle = await Vehicle.create({
+    name,
+    type,
+    description,
+    pricePerDay,
+    status,
+    owner,
+  });
+
+  res.status(201).json({
+    status: 'success',
+    message: 'Vehicle created successfully!',
+    data: {
+      vehicle,
     },
   });
 });
