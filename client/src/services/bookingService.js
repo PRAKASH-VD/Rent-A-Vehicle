@@ -6,9 +6,7 @@ const createBooking = async (bookingData) => {
   try {   
     const token = localStorage.getItem("userToken" ,"adminToken");
     const response = await axios.post(`${API_URL}`, bookingData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {

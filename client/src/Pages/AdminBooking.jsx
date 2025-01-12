@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const AdminBookingPage = ({ currentUser }) => {
   const [vehicles, setVehicles] = useState([]);
@@ -22,9 +22,7 @@ const adminId = decoded.id;
       try {
         const response = await axios.get("https://rent-a-vehicle.onrender.com/api/vehicles",//need reandorlink https://rent-a-vehicle.onrender.com
           {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include auth token
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
         setVehicles(response.data);
@@ -53,9 +51,8 @@ const adminId = decoded.id;
         const response = await axios.get(
           `https://rent-a-vehicle.onrender.com/api/bookings/vehicle/${selectedVehicle}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include auth token
-            },
+            headers: { Authorization: `Bearer ${token}` },
+
           }
         );
         setBookings(response.data || []);

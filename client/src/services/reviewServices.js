@@ -8,9 +8,7 @@ const createReview = async (formData) => {
     const token = localStorage.getItem ('userToken','authToken'); 
     // Sending a POST request with reviewData and Authorization token
     const response = await axios.post(`${API_URL}`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Include the JWT token for authorization
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     // Return the response data (review created)
@@ -31,7 +29,7 @@ const updateReview = async (reviewId, reviewData, token) => {
 const deleteReview = async (reviewId) => {
   const token = localStorage.getItem('userToken');
   const response = await axios.delete(`${API_URL}/${reviewId}`, {
-  headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
   return response.data;
 };

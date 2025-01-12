@@ -21,9 +21,7 @@ const createVehicle = async (vehicleData) => {
   try {
     const token = localStorage.getItem("adminToken");
     const response = await axios.post(`${API_URL}`, vehicleData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     console.log("createVehicle called with token:", token);
     return response.data;
@@ -37,9 +35,7 @@ const updateVehicle = async (vehicleId, vehicleData) => {
   try {
     const token = localStorage.getItem("adminToken");
     const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {
@@ -52,9 +48,7 @@ const deleteVehicle = async (vehicleId) => {
   try {
     const token = localStorage.getItem("adminToken");
     const response = await axios.delete(`${API_URL}/${vehicleId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
   } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import { motion } from "framer-motion";
 
 const AdminDashboardPage = () => {
@@ -14,10 +14,14 @@ const AdminDashboardPage = () => {
   const [error, setError] = useState(null);
 
   const token = localStorage.getItem("adminToken");
-  const decoded = jwtDecode(token);
+  const decoded = token ? jwtDecode(token) : null;
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    if (!token) {
+      setError("You are not authenticated. Please log in.");
+      return;
+    }
+        const fetchDashboardData = async () => {
       setLoading(true);
       try {
         const response = await axios.get(
@@ -27,23 +31,18 @@ const AdminDashboardPage = () => {
           }
         );
 
-        const { stats } = response.data;
-        setStats({
-          totalUsers: stats.totalUsers,
-          totalVehicles: stats.totalVehicles,
-          totalBookings: stats.totalBookings,
-          totalReviews: stats.totalReviews,
-        });
+        const { totalUsers, totalVehicles, totalBookings, totalReviews } = response.data.stats;
+        setStats({ totalUsers, totalVehicles, totalBookings, totalReviews });
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
-        setError("Failed to load dashboard data.");
+        setError(err.response?.data?.message || "Failed to load dashboard data.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchDashboardData();
-  }, [token]);
+  }, []);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
