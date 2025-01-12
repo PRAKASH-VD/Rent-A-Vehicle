@@ -24,7 +24,7 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.CLIENT_URL || 'https://illustrious-platypus-323cb4.netlify.app',
+    origin: process.env.CLIENT_URL || 'https://reant-a-vehicles.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
     // origin: '*'
