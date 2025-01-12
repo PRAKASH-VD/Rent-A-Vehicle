@@ -11,7 +11,7 @@ export const userSchema = z.object({
 export const vehicleSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  cuisine: z.string(),
+  type: z.string(),
   priceRange: z.enum(PRICE_RANGES),
   address: z.object({
     street: z.string(),

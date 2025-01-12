@@ -89,8 +89,8 @@ const CreateVehicle = () => {
             <label htmlFor="type" className="block text-sm font-semibold">Type</label>  
             <input  
               type="text"  
-              id="cuisine"  
-              value={cuisine}  
+              id="type"  
+              value={type}  
               onChange={(e) => setType(e.target.value)}  
               className="w-full p-3 mt-2 border border-gray-600 rounded-lg bg-gray-700 text-white focus:ring-2 focus:ring-blue-500"  
               placeholder="Enter  type"  

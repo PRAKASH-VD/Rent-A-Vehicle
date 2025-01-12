@@ -25,7 +25,7 @@ export const getVehicles = async (req, res) => {
       query.$or = [
         { name: { $regex: search, $options: 'i' } },
         { 'address.city': { $regex: search, $options: 'i' } },
-        { cuisine: { $regex: search, $options: 'i' } },
+        { type: { $regex: search, $options: 'i' } },
       ];
     }
 

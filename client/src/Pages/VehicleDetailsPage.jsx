@@ -22,7 +22,7 @@ const VehicleDetailsPage = () => {
         setVehicle({
           name: data.name || "Vehicle Name Not Found",
           description: data.description || "Description not found",
-          type: data.cuisine || " type not specified",
+          type: data.type || " type not specified",
           priceRange: data.priceRange || "N/A",
           images: data.images.length > 0 ? data.images : [],
           rating: data.rating > 0 ? data.rating : 5,
@@ -127,7 +127,7 @@ const VehicleDetailsPage = () => {
 
             <div className="lg:w-3/4">
               <p className="text-lg text-gray-300 mb-2">
-                <strong>Cuisine: </strong>
+                <strong>type: </strong>
                 {vehicle.type}
               </p>
               <p className="text-lg text-gray-300 mb-2">

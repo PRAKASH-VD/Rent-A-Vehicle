@@ -84,7 +84,7 @@ export const getAllVehicles = catchAsync(async (req, res) => {
     ...(search && {
       $or: [
         { name: { $regex: search, $options: 'i' } },
-        { cuisine: { $regex: search, $options: 'i' } },
+        { type: { $regex: search, $options: 'i' } },
       ],
     }),
     ...(status && { status }),
@@ -129,7 +129,7 @@ export const getVehicleAnalytics = catchAsync(async (req, res) => {
       { $group: { _id: null, avgRating: { $avg: '$rating' } } },
     ]),
     Vehicle.aggregate([
-      { $group: { _id: '$cuisine', count: { $sum: 1 } } },
+      { $group: { _id: '$type', count: { $sum: 1 } } },
       { $sort: { count: -1 } },
     ]),
   ]);
