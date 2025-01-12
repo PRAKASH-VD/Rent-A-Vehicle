@@ -4,6 +4,7 @@ import Booking from '../models/Booking.js';
 import Review from '../models/Review.js';
 import { catchAsync } from '../utils/catchAsync.js';
 
+// Get dashboard statistics
 export const getDashboardStats = catchAsync(async (req, res) => {
   const [
     totalUsers,
@@ -24,7 +25,7 @@ export const getDashboardStats = catchAsync(async (req, res) => {
     .sort('-createdAt')
     .limit(5);
 
-  const recentReviews = await Review.find()
+ const recentReviews = await Review.find()
     .populate('vehicle', 'name')
     .populate('user', 'name')
     .sort('-createdAt')
@@ -44,6 +45,7 @@ export const getDashboardStats = catchAsync(async (req, res) => {
   });
 });
 
+// Get all users with pagination and search
 export const getAllUsers = catchAsync(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -74,6 +76,7 @@ export const getAllUsers = catchAsync(async (req, res) => {
   });
 });
 
+// Get all vehicles with pagination, search, and status filter
 export const getAllVehicles = catchAsync(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -91,21 +94,22 @@ export const getAllVehicles = catchAsync(async (req, res) => {
   };
 
   const vehicles = await Vehicle.find(query)
-    .populate('owner', 'name email')
-    .sort('-createdAt')
-    .skip((page - 1) * limit)
-    .limit(limit);
+  .populate('owner', 'name email')
+  .sort('-createdAt')
+  .skip((page - 1) * limit)
+  .limit(limit);
 
-  const total = await Vehicle.countDocuments(query);
+const total = await Vehicle.countDocuments(query);
 
-  res.json({
-    vehicles,
-    page,
-    pages: Math.ceil(total / limit),
-    total,
-  });
+res.json({
+  vehicles,
+  page,
+  pages: Math.ceil(total / limit),
+  total,
+});
 });
 
+// Get vehicle analytics (e.g., bookings, reviews, type distribution)
 export const getVehicleAnalytics = catchAsync(async (req, res) => {
   const { startDate, endDate } = req.query;
 
@@ -146,6 +150,8 @@ export const getVehicleAnalytics = catchAsync(async (req, res) => {
   });
 });
 
+
+// Get booking statistics by status and daily trends
 export const getBookingStats = catchAsync(async (req, res) => {
   const { startDate, endDate } = req.query;
 
@@ -183,6 +189,7 @@ export const getBookingStats = catchAsync(async (req, res) => {
   });
 });
 
+// Get review statistics (rating distribution and daily trends)
 export const getReviewStats = catchAsync(async (req, res) => {
   const { startDate, endDate } = req.query;
 
@@ -212,7 +219,7 @@ export const getReviewStats = catchAsync(async (req, res) => {
     ]),
   ]);
 
-  res.json({
+    res.json({
     ratingDistribution,
     dailyTrends: dailyReviews,
   });

@@ -25,16 +25,16 @@ const AdminDashboardPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "https://rent-a-vehicle.onrender.com/api/admin/dashboard", //need rendorline
+          "https://rent-a-vehicle.onrender.com/api/admin/dashboard",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
+        console.log("Dashboard Data:", response.data);
         const { totalUsers, totalVehicles, totalBookings, totalReviews } = response.data.stats;
         setStats({ totalUsers, totalVehicles, totalBookings, totalReviews });
       } catch (err) {
-        console.error("Error fetching dashboard data:", err);
+        console.error("Error fetching dashboard data:", err.response?.data || err.message);
         setError(err.response?.data?.message || "Failed to load dashboard data.");
       } finally {
         setLoading(false);

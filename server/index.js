@@ -11,7 +11,7 @@ import authRoutes from './routes/authRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import recommendationRoutes from './routes/recommendationRoutes.js';
-import dashboard from './routes/dashboard.js';
+// import dashboard from './routes/dashboard.js';
 
 
 
@@ -33,9 +33,11 @@ const io = new Server(httpServer, {
 
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [process.env.CLIENT_URL || 'https://reant-a-vehicles.netlify.app', 'http://localhost:3000'],
+  credentials: true,
+}));
 app.use(express.json());
-
 // Make io available in routes
 app.set('io', io);
 
@@ -48,10 +50,10 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/recommendations' ,recommendationRoutes)
-app.use('/api/dashboard',dashboard)
+// app.use('/api/dashboard',dashboard)
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URL,{serverSelectionTimeoutMS: 5000,})// Timeout after 5 seconds
+mongoose.connect(process.env.MONGODB_URL,{serverSelectionTimeoutMS: 10000,})// Timeout after 5 seconds
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('MongoDB connection error:', error));
   
@@ -85,10 +87,12 @@ io.on('connection', (socket) => {
   });
 });
 
-// Error handling middleware
+// Error Handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Internal server error', error: err.message});
+  res.status(err.status || 500).json({
+    message: err.status === 500 ? 'Internal server error' : err.message,
+  });
 });
 
 // Start server
