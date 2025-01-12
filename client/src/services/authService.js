@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api/auth';//need rendorlink
+const API_URL = 'https://rent-a-vehicle.onrender.com/api/auth';//need rendorlink
 
 const login = async (email, password) => {
   const response = await axios.post(`${API_URL}/login`, { email, password });

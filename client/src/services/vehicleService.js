@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api/vehicles';//need rendor link
+const API_URL = 'https://rent-a-vehicle.onrender.com/api/vehicles';//need rendor link
 
 const getAllVehicles = async (query = "") => {
   const response = await axios.get(`${API_URL}${query}`);

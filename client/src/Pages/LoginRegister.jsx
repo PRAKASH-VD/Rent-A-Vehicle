@@ -25,7 +25,7 @@ const LoginRegister = () => {
     try {
       const response = await axios.post(
        
-        "http://localhost:3001/api/auth/register", //need rendorlink
+        "https://rent-a-vehicle.onrender.com/api/auth/register", //need rendorlink
         formData
       );
 

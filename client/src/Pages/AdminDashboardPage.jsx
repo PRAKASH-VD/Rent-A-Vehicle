@@ -21,7 +21,7 @@ const AdminDashboardPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/admin/dashboard", //need rendorline
+          "https://rent-a-vehicle.onrender.com/api/admin/dashboard", //need rendorline
           {
             headers: { Authorization: `Bearer ${token}` },
           }

@@ -15,4 +15,10 @@ npm install nodemailer
 
 
 
+### dotenv
+
+MONGODB_URL
+JWT_SECRET
+
+
 

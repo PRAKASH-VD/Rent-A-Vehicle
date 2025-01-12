@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api/reviews'; 
+const API_URL = 'https://rent-a-vehicle.onrender.com/api/reviews'; 
 
 // Function to create a review
 const createReview = async (formData) => {

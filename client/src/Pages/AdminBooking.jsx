@@ -20,7 +20,7 @@ const adminId = decoded.id;
   useEffect(() => {
     const fetchOwnedVehicles = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/vehicles",//need reandorlink
+        const response = await axios.get("https://rent-a-vehicle.onrender.com/api/vehicles",//need reandorlink
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include auth token
@@ -51,7 +51,7 @@ const adminId = decoded.id;
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3001/api/bookings/vehicle/${selectedVehicle}`,
+          `https://rent-a-vehicle.onrender.com/api/bookings/vehicle/${selectedVehicle}`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Include auth token
